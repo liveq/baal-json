@@ -297,21 +297,21 @@
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="container" style="position: relative;">
+        <!-- 우측 상단 버튼 -->
+        <div class="header-buttons" style="position: absolute; top: 20px; right: 20px; display: flex; gap: 8px; z-index: 100;">
+            <button id="darkModeBtn" onclick="window.BaalUtils.toggleDarkMode()" title="다크모드 전환">
+                🌙
+            </button>
+            <button id="langBtn" onclick="window.BaalUtils.toggleLanguage()" title="언어 전환">
+                🌐
+            </button>
+        </div>
+
         <main>
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                <h1 id="pageTitle" style="margin: 0; flex: 1; text-align: center;">
-                    <span data-ko="JSON 포맷터" data-en="JSON Formatter">JSON 포맷터</span>
-                </h1>
-                <div class="header-buttons" style="display: flex; gap: 8px;">
-                    <button id="darkModeBtn" onclick="window.BaalUtils.toggleDarkMode()" title="다크모드 전환">
-                        🌙
-                    </button>
-                    <button id="langBtn" onclick="window.BaalUtils.toggleLanguage()" title="언어 전환">
-                        🌐
-                    </button>
-                </div>
-            </div>
+            <h1 id="pageTitle" style="text-align: center; margin-bottom: 15px;">
+                <span data-ko="JSON 포맷터" data-en="JSON Formatter">JSON 포맷터</span>
+            </h1>
             <p style="text-align: center; color: var(--text-secondary); margin-bottom: 20px;">
                 <span data-ko="JSON 정렬, 압축, 검증을 빠르게 처리하세요" data-en="Format, minify, and validate JSON quickly">JSON 정렬, 압축, 검증을 빠르게 처리하세요</span>
             </p>
