@@ -293,12 +293,117 @@
             color: var(--text-primary);
             font-weight: 600;
         }
+
+        /* 모달 스타일 */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            animation: fadeIn 0.2s ease;
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 30px 40px;
+            border-radius: 12px;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--gold-primary);
+            padding-bottom: 15px;
+        }
+
+        .modal-title {
+            font-size: 1.5em;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .modal-close {
+            font-size: 1.8em;
+            font-weight: 300;
+            color: var(--text-secondary);
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            line-height: 30px;
+            text-align: center;
+        }
+
+        .modal-close:hover {
+            color: var(--text-primary);
+        }
+
+        .modal-body h3 {
+            color: var(--gold-primary);
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .modal-body p {
+            line-height: 1.8;
+            color: var(--text-primary);
+            margin-bottom: 15px;
+        }
+
+        .modal-body ul {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+
+        .modal-body li {
+            line-height: 1.8;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .modal-body code {
+            background: var(--bg-secondary);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.9em;
+            color: var(--gold-primary);
+        }
     </style>
 </head>
 <body>
     <div class="container" style="position: relative;">
         <!-- 우측 상단 버튼 -->
         <div class="header-buttons" style="position: absolute; top: 20px; right: 20px; display: flex; gap: 8px; z-index: 100;">
+            <button id="helpBtn" onclick="openHelpModal()" title="사용법">
+                ❓
+            </button>
             <button id="darkModeBtn" onclick="window.BaalUtils.toggleDarkMode()" title="다크모드 전환">
                 🌙
             </button>
@@ -399,6 +504,73 @@
                 </div>
             </div>
         </main>
+
+        <!-- 사용법 모달 -->
+        <div id="helpModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title">
+                        <span data-ko="사용법" data-en="How to Use">사용법</span>
+                    </h2>
+                    <button class="modal-close" onclick="closeHelpModal()">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <h3 data-ko="JSON이란?" data-en="What is JSON?">JSON이란?</h3>
+                    <p data-ko="JSON(JavaScript Object Notation)은 데이터를 저장하고 전송하는 데 사용되는 경량 텍스트 형식입니다. 웹 개발, API 통신, 설정 파일 등에서 널리 사용됩니다." data-en="JSON (JavaScript Object Notation) is a lightweight text format for storing and transmitting data. It's widely used in web development, API communication, and configuration files.">
+                        JSON(JavaScript Object Notation)은 데이터를 저장하고 전송하는 데 사용되는 경량 텍스트 형식입니다. 웹 개발, API 통신, 설정 파일 등에서 널리 사용됩니다.
+                    </p>
+
+                    <h3 data-ko="기본 기능" data-en="Main Features">기본 기능</h3>
+                    <ul>
+                        <li data-ko="🎨 정렬하기: JSON을 읽기 쉽게 들여쓰기하여 정렬합니다" data-en="🎨 Format: Makes JSON readable with proper indentation">
+                            <strong>🎨 정렬하기:</strong> JSON을 읽기 쉽게 들여쓰기하여 정렬합니다
+                        </li>
+                        <li data-ko="📦 압축하기: JSON을 한 줄로 압축하여 파일 크기를 줄입니다" data-en="📦 Minify: Compresses JSON to one line to reduce file size">
+                            <strong>📦 압축하기:</strong> JSON을 한 줄로 압축하여 파일 크기를 줄입니다
+                        </li>
+                        <li data-ko="✓ 검증하기: JSON 문법이 올바른지 확인하고 오류를 표시합니다" data-en="✓ Validate: Checks if JSON syntax is correct and shows errors">
+                            <strong>✓ 검증하기:</strong> JSON 문법이 올바른지 확인하고 오류를 표시합니다
+                        </li>
+                    </ul>
+
+                    <h3 data-ko="사용 방법" data-en="How to Use">사용 방법</h3>
+                    <ul>
+                        <li data-ko="1. 왼쪽 '입력' 창에 JSON을 붙여넣거나 직접 입력합니다" data-en="1. Paste or type JSON in the left 'Input' panel">
+                            1. 왼쪽 <strong>'입력'</strong> 창에 JSON을 붙여넣거나 직접 입력합니다
+                        </li>
+                        <li data-ko="2. 원하는 작업 버튼(정렬/압축/검증)을 클릭합니다" data-en="2. Click the desired action button (Format/Minify/Validate)">
+                            2. 원하는 작업 버튼(<strong>정렬</strong>/<strong>압축</strong>/<strong>검증</strong>)을 클릭합니다
+                        </li>
+                        <li data-ko="3. 오른쪽 '출력' 창에서 결과를 확인합니다" data-en="3. Check the result in the right 'Output' panel">
+                            3. 오른쪽 <strong>'출력'</strong> 창에서 결과를 확인합니다
+                        </li>
+                        <li data-ko="4. '복사' 버튼으로 결과를 클립보드에 복사할 수 있습니다" data-en="4. Use 'Copy' button to copy the result to clipboard">
+                            4. <strong>'복사'</strong> 버튼으로 결과를 클립보드에 복사할 수 있습니다
+                        </li>
+                    </ul>
+
+                    <h3 data-ko="출력 모드" data-en="Output Modes">출력 모드</h3>
+                    <ul>
+                        <li data-ko="포맷: 정렬된 JSON을 텍스트로 표시합니다" data-en="Format: Shows formatted JSON as text">
+                            <strong>포맷:</strong> 정렬된 JSON을 텍스트로 표시합니다
+                        </li>
+                        <li data-ko="트리: JSON 구조를 계층적으로 표시하며, 접기/펴기가 가능합니다" data-en="Tree: Shows JSON structure hierarchically with collapse/expand">
+                            <strong>트리:</strong> JSON 구조를 계층적으로 표시하며, 접기/펴기가 가능합니다
+                        </li>
+                    </ul>
+
+                    <h3 data-ko="예제" data-en="Example">예제</h3>
+                    <p data-ko="입력 예시:" data-en="Input example:">입력 예시:</p>
+                    <code>{"name":"홍길동","age":30,"city":"서울"}</code>
+                    <p style="margin-top: 10px;" data-ko="정렬 후 결과:" data-en="After formatting:">정렬 후 결과:</p>
+                    <pre style="background: var(--bg-secondary); padding: 10px; border-radius: 6px; overflow-x: auto;">{
+  "name": "홍길동",
+  "age": 30,
+  "city": "서울"
+}</pre>
+                </div>
+            </div>
+        </div>
 
         <footer>
             <div class="footer-content">
@@ -689,6 +861,25 @@
             document.getElementById('statsBar').style.display = 'none';
             parsedJSON = null;
             window.BaalUtils.showToast('초기화 완료!', 'success', 3000);
+        }
+
+        // 사용법 모달 열기
+        function openHelpModal() {
+            document.getElementById('helpModal').style.display = 'block';
+            window.BaalUtils.updateLanguage();
+        }
+
+        // 사용법 모달 닫기
+        function closeHelpModal() {
+            document.getElementById('helpModal').style.display = 'none';
+        }
+
+        // 모달 외부 클릭 시 닫기
+        window.onclick = function(event) {
+            const modal = document.getElementById('helpModal');
+            if (event.target === modal) {
+                closeHelpModal();
+            }
         }
     </script>
 </body>
