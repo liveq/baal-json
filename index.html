@@ -220,12 +220,19 @@
             border-radius: 6px;
             font-weight: 600;
             cursor: pointer;
-            transition: background 0.2s;
+            transition: all 0.2s;
             font-size: 0.95em;
         }
 
         .btn-primary:hover {
             background: var(--gold-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 6px rgba(212, 175, 55, 0.2);
         }
 
         .btn-secondary {
@@ -368,6 +375,11 @@
             margin-top: 20px;
             margin-bottom: 10px;
             font-size: 1.1em;
+        }
+
+        .modal-body {
+            word-break: keep-all;
+            word-wrap: break-word;
         }
 
         .modal-body p {
@@ -646,21 +658,26 @@
         function validateJSON() {
             const input = document.getElementById('jsonInput').value.trim();
             if (!input) {
-                window.BaalUtils.showToast('JSON을 입력하세요', 'error', 3000);
+                window.BaalUtils.showToast('왼쪽 입력창에 JSON을 입력하거나 "📝 샘플 로드" 버튼을 눌러보세요', 'error', 5000);
                 return;
             }
 
             try {
                 parsedJSON = JSON.parse(input);
+
+                // 데이터 타입 확인
+                const dataType = Array.isArray(parsedJSON) ? '배열' : typeof parsedJSON === 'object' ? '객체' : typeof parsedJSON;
+
                 document.getElementById('jsonOutput').innerHTML = `
                     <div style="text-align: center; padding: 60px 20px; color: #28a745;">
                         <div style="font-size: 4em;">✓</div>
                         <h3 style="margin: 15px 0;" data-ko="유효한 JSON입니다" data-en="Valid JSON">유효한 JSON입니다</h3>
-                        <p style="color: var(--text-secondary);" data-ko="JSON 구조가 올바릅니다" data-en="JSON structure is correct">JSON 구조가 올바릅니다</p>
+                        <p style="color: var(--text-secondary); margin-bottom: 10px;" data-ko="JSON 구조가 올바릅니다" data-en="JSON structure is correct">JSON 구조가 올바릅니다</p>
+                        <p style="color: var(--text-tertiary); font-size: 0.9em;">타입: ${dataType}</p>
                     </div>
                 `;
                 window.BaalUtils.updateLanguage();
-                window.BaalUtils.showToast('검증 성공!', 'success', 3000);
+                window.BaalUtils.showToast('✓ 검증 성공! JSON이 올바릅니다.', 'success', 3000);
                 updateStats(JSON.stringify(parsedJSON, null, 2));
             } catch (error) {
                 showError(error);
@@ -672,13 +689,20 @@
             const output = document.getElementById('jsonOutput');
             output.innerHTML = `
                 <div class="json-error">
-                    <strong data-ko="JSON 오류:" data-en="JSON Error:">JSON 오류:</strong><br><br>
+                    <strong data-ko="⚠ JSON 형식 오류" data-en="⚠ JSON Format Error">⚠ JSON 형식 오류</strong><br><br>
+                    <strong>에러 내용:</strong><br>
                     ${error.message}<br><br>
-                    <small data-ko="입력한 JSON의 형식을 확인하세요" data-en="Please check your JSON format">입력한 JSON의 형식을 확인하세요</small>
+                    <strong>해결 방법:</strong><br>
+                    <small>
+                    • 따옴표(" ")가 올바르게 닫혀있는지 확인하세요<br>
+                    • 중괄호({})와 대괄호([])가 짝이 맞는지 확인하세요<br>
+                    • 마지막 항목 뒤에 쉼표(,)가 없는지 확인하세요<br>
+                    • "📝 샘플 로드" 버튼으로 올바른 형식을 확인해보세요
+                    </small>
                 </div>
             `;
             window.BaalUtils.updateLanguage();
-            window.BaalUtils.showToast('JSON 오류가 발생했습니다', 'error', 5000);
+            window.BaalUtils.showToast('⚠ JSON 형식 오류 - 입력을 확인하세요', 'error', 5000);
             document.getElementById('statsBar').style.display = 'none';
         }
 
@@ -846,7 +870,16 @@
             };
 
             document.getElementById('jsonInput').value = JSON.stringify(sample, null, 2);
-            window.BaalUtils.showToast('샘플 로드 완료!', 'success', 3000);
+            window.BaalUtils.showToast('샘플 로드 완료! 이제 정렬/압축/검증 버튼을 눌러보세요.', 'success', 5000);
+
+            // 출력창 초기화
+            document.getElementById('jsonOutput').innerHTML = `
+                <div style="text-align: center; color: var(--text-secondary); padding: 60px 20px;">
+                    <p data-ko="정렬, 압축, 검증 버튼을 클릭하세요" data-en="Click Format, Minify, or Validate button">정렬, 압축, 검증 버튼을 클릭하세요</p>
+                </div>
+            `;
+            window.BaalUtils.updateLanguage();
+            document.getElementById('statsBar').style.display = 'none';
         }
 
         // 초기화
